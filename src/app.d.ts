@@ -8,6 +8,19 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
+
+	interface Window {
+		electron: {
+			onFocusChange: (callback: (focused: boolean) => void) => void;
+			storage: {
+				get: (key: string) => unknown;
+				set: (key: string, value: unknown) => void;
+			};
+		};
+	}
 }
+
+/// <reference types="svelte" />
+/// <reference types="vite/client" />
 
 export {};

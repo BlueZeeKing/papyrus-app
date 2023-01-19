@@ -5,5 +5,9 @@ contextBridge.exposeInMainWorld('electron', {
 		ipcRenderer.on('focus', (e, focus) => {
 			callback(focus);
 		});
+	},
+	storage: {
+		get: (key) => ipcRenderer.invoke('storage:get', key),
+		set: (key, value) => ipcRenderer.invoke('storage:set', key, value)
 	}
 });
