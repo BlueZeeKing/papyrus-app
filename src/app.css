@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hide-scroll-bar::-webkit-scrollbar {
+	display: none;
+}
+
+.primary {
+	@apply fill-zinc-300 transition duration-100;
+}
+
+.secondary {
+	@apply fill-zinc-300 transition duration-100;
+}
+
+svg:active > .primary {
+	@apply fill-zinc-50;
+}
+
+svg:active > .secondary {
+	@apply fill-zinc-50;
+}

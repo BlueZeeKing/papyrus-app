@@ -1,15 +1,54 @@
 <script lang="ts">
 	import CardList from '../components/CardList.svelte';
+	import { getAllFabricGameVersions, getAllVanillaVersions } from 'papyrus-mc/src/fetch/versions';
+	import dayjs from 'dayjs';
+
+	//@ts-expect-error
+	import image from '../assets/fabric.webp';
 </script>
 
-<CardList
-	cards={[
-		{
-			name: '1.19.3',
-			image:
-				'https://www.minecraft.net/content/dam/games/minecraft/screenshots/1.19.3_header.jpg.transform/minecraft-image-large/image.jpg',
-			desc: 'This release gives the Vex a brand new look as well as containing bug fixes.'
-		}
-	]}
-	header="Vanilla"
-/>
+{#await getAllVanillaVersions()}
+	<CardList cards={[]} header="Vanilla" load />
+{:then data}
+	<CardList
+		cards={data.versions
+			.filter((version) => version.type == 'release')
+			.slice(0, 15)
+			.map((version) => ({
+				name: version.id,
+				desc: `Released on ${dayjs(version.releaseTime).format('MMMM D, YYYY')}`
+			}))}
+		header="Vanilla"
+	/>
+{/await}
+
+{#await getAllVanillaVersions()}
+	<CardList cards={[]} header="Snapshots" load />
+{:then data}
+	<CardList
+		cards={data.versions
+			.filter((version) => version.type == 'snapshot')
+			.slice(0, 15)
+			.map((version) => ({
+				name: version.id,
+				desc: `Released on ${dayjs(version.releaseTime).format('MMMM D, YYYY')}`
+			}))}
+		header="Snapshots"
+	/>
+{/await}
+
+{#await getAllFabricGameVersions()}
+	<CardList cards={[]} header="Fabric" load />
+{:then data}
+	<CardList
+		cards={data
+			.filter((version) => version.stable)
+			.slice(0, 15)
+			.map((version) => ({
+				name: version.version,
+				desc: 'Lightweight modding toolchain for Minecraft.',
+				image: image
+			}))}
+		header="Fabric"
+	/>
+{/await}
