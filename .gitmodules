@@ -1,0 +1,3 @@
+[submodule "src-electron/papyrus"]
+	path = src-electron/papyrus
+	url = https://github.com/BlueZeeKing/papyrus
