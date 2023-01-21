@@ -10,7 +10,17 @@
 		"sourceMap": true,
 		"strict": true
 	},
-	"exclude": ["node_modules", "**/*.{js, cjs, mjs}"]
+	"exclude": [
+		"node_modules",
+		"index.cjs",
+		"out",
+		"postcss.config.cjs",
+		"rollup.config.mjs",
+		"tailwind.config.cjs",
+		"svelte.config.js",
+		"src-electron/papyrus/rollup.config.mjs",
+		"src-electron/preload.cjs"
+	]
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//
 	// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes

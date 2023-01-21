@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Sidebar from './Sidebar.svelte';
-	let focus = true;
+	import { focus } from '../libs/focus';
 
 	onMount(async () => {
-		window.electron.onFocusChange((a: boolean) => (focus = a));
-
 		window.addEventListener('mousemove', (e) => {
 			e.preventDefault();
 			if (clicked == true) {
@@ -36,12 +34,17 @@
 	style={`grid-template-columns: ${Math.max(width, 0)}px calc(100vw - ${Math.max(width, 0)}px);`}
 >
 	<header
-		class={`${
-			focus ? 'bg-[#37373C]' : 'bg-zinc-800 border-b'
-		} border-zinc-700 transition duration-100 top`}
+		class="bg-[#37373C] border-zinc-700 transition duration-100 top"
+		class:!bg-zinc-800={!$focus}
+		class:border-b={!$focus}
 		style="-webkit-app-region: drag"
 	/>
 	<Sidebar onClick={() => (clicked = true)} />
+	<div
+		class="top-0 fixed border-r border-zinc-700 h-screen"
+		class:hidden={$focus}
+		style:left={`${width}px`}
+	/>
 	<div class="p-2 main overflow-y-auto">
 		<slot />
 	</div>

@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { Storage } from './storage';
 import { loadLoginInfo } from './papyrus/src/auth/persist';
+import { getProfile } from './papyrus/src/auth/auth';
 
 const createWindow = () => {
 	const win = new BrowserWindow({
@@ -37,7 +38,7 @@ async function main() {
 
 	await app.whenReady();
 
-	console.log(await loadLoginInfo(dataPath));
+	console.log(await getProfile((await loadLoginInfo(dataPath)).token));
 
 	storage.addListeners();
 
