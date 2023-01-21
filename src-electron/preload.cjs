@@ -9,5 +9,10 @@ contextBridge.exposeInMainWorld('electron', {
 	storage: {
 		get: (key) => ipcRenderer.invoke('storage:get', key),
 		set: (key, value) => ipcRenderer.invoke('storage:set', key, value)
+	},
+	route: {
+		change: (route) => ipcRenderer.send('changeRoute', route),
+		onChange: (callback) => ipcRenderer.on('changeRoute', (e, data) => callback(data)),
+		openContextMenu: (route) => ipcRenderer.send('openRouteContext', route)
 	}
 });

@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { readFile } from 'fs/promises';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
+import { Storage } from './storage';
 
 const createWindow = () => {
 	const win = new BrowserWindow({
@@ -25,42 +25,21 @@ const createWindow = () => {
 	});
 };
 
+export const dataPath = resolve(app.getPath('appData'), 'papyrus');
+
 async function main() {
-	let timeout: undefined | NodeJS.Timeout = undefined;
-
-	function updateStorage() {
-		if (timeout != undefined) {
-			clearTimeout(timeout);
-		}
-
-		timeout = setTimeout(() => {
-			writeFileSync(storagePath, JSON.stringify(storage), { encoding: 'utf-8' });
-			timeout = undefined;
-		}, 1000);
+	if (!existsSync(dataPath)) {
+		mkdirSync(dataPath, { recursive: true });
 	}
 
-	const storagePath = resolve(app.getPath('appData'), 'papyrus', 'storage.json');
-
-	if (!existsSync(resolve(app.getPath('appData'), 'papyrus'))) {
-		mkdirSync(resolve(app.getPath('appData'), 'papyrus'), { recursive: true });
-	}
-
-	let fileData: string;
-
-	try {
-		fileData = await readFile(storagePath, { encoding: 'utf-8' });
-	} catch {
-		fileData = '{}';
-	}
-
-	const storage: { [key: string]: unknown } = JSON.parse(fileData);
+	const storage = new Storage(dataPath);
 
 	await app.whenReady();
 
-	ipcMain.handle('storage:get', (e, key: string) => storage[key]);
-	ipcMain.handle('storage:set', (e, key: string, value: unknown) => {
-		storage[key] = value;
-		updateStorage();
+	storage.addListeners();
+
+	ipcMain.on('changeRoute', (e, route: string) => {
+		e.sender.send('changeRoute', route);
 	});
 
 	createWindow();

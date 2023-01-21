@@ -15,9 +15,9 @@
 
 <div class="">
 	{#if header != undefined}
-		<div class="flex px-4">
+		<div class="flex px-4 pt-2">
 			<hr class="w-12 m-auto border-zinc-600" />
-			<h2 class="p-4 pt-6 text-zinc-100 text-xl">{header}</h2>
+			<h2 class="p-4 text-zinc-100 text-xl">{header}</h2>
 			<hr class="flex-grow m-auto border-zinc-600" />
 		</div>
 	{/if}

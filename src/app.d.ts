@@ -16,6 +16,11 @@ declare global {
 				get: (key: string) => unknown;
 				set: (key: string, value: unknown) => void;
 			};
+			route: {
+				change: (route: string) => void;
+				onChange: (callback: (route: string) => void) => void;
+				openContextMenu: (route: string) => void;
+			};
 		};
 	}
 }
