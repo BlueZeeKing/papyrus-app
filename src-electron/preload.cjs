@@ -25,7 +25,9 @@ contextBridge.exposeInMainWorld('electron', {
 		add: () => ipcRenderer.invoke('user:add'),
 		getActive: () => ipcRenderer.invoke('user:getActive'),
 		setActive: (id) => ipcRenderer.send('user:setActive', id),
-		onActive: (callback) => ipcRenderer.on('user:onActive', callback)
+		onActive: (callback) => ipcRenderer.on('user:onActive', callback),
+		onRemove: (callback) => ipcRenderer.on('user:onRemove', callback),
+		remove: (id) => ipcRenderer.send('user:remove', id)
 	},
 
 	skin: {

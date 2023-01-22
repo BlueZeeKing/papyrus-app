@@ -58,16 +58,12 @@ export class SkinSetter {
 			data.append('variant', slim ? 'slim' : 'classic');
 			data.append('file', createReadStream(this.filePath));
 
-			const res = await axios.post(
-				'https://api.minecraftservices.com/minecraft/profile/skins',
-				data,
-				{
-					headers: {
-						Authorization: `Bearer ${(await loadSingleProfile(this.uuid as string))?.token}`,
-						...data.getHeaders()
-					}
+			await axios.post('https://api.minecraftservices.com/minecraft/profile/skins', data, {
+				headers: {
+					Authorization: `Bearer ${(await loadSingleProfile(this.uuid as string))?.token}`,
+					...data.getHeaders()
 				}
-			);
+			});
 
 			BrowserWindow.getAllWindows().forEach((window) => {
 				window.webContents.send('skin:refetch', this.uuid);

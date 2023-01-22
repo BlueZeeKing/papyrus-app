@@ -28,7 +28,7 @@
 	<h2 class="text my-auto mx-3 text-md text-zinc-100">{username}</h2>
 	<div class="flex-grow" />
 	<Button on:click={() => window.electron.skin.start(uuid)}>Change Skin</Button>
-	<IconButton state="error">
+	<IconButton state="error" on:click={() => window.electron.users.remove(uuid)}>
 		<Trash slot="icon" class="h-6" />
 		<span slot="text">Remove</span>
 	</IconButton>

@@ -20,7 +20,9 @@ export class ContextMenu {
 						this.skin.setSkin(BrowserWindow.fromWebContents(e.sender) as BrowserWindow, id)
 				},
 				{
-					label: 'Remove'
+					label: 'Remove',
+					click: () =>
+						this.user.remove(id, BrowserWindow.fromWebContents(e.sender) as BrowserWindow)
 				},
 				{
 					label: 'Set Active',

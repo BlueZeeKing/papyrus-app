@@ -3,11 +3,17 @@
 	import Button from '../components/Button.svelte';
 
 	let promise = window.electron.users.get();
+
+	window.electron.users.onRemove(
+		async () => (promise = Promise.resolve(await window.electron.users.get()))
+	);
 </script>
 
-<Button state="primary" on:click={() => (promise = window.electron.users.add())}>Add</Button>
-
-<hr class="m-4 border-zinc-500" />
+<Button
+	state="primary"
+	extraClasses="fixed bottom-0 right-0"
+	on:click={async () => (promise = Promise.resolve(await window.electron.users.add()))}>Add</Button
+>
 
 <div class="flex flex-col" role="list">
 	{#await promise}

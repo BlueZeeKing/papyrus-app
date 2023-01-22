@@ -24,6 +24,8 @@ declare global {
 
 			route: {
 				openContextMenu: (route: string) => void;
+				change: (route: string) => void;
+				onChange: (callback: (e: unknown, route: string) => void) => void;
 			};
 
 			users: {
@@ -32,6 +34,8 @@ declare global {
 				getActive: () => Promise<string>;
 				setActive: (id: string) => void;
 				onActive: (callback: (e: unknown, id: string) => void) => void;
+				onRemove: (callback: (e: unknown) => void) => void;
+				remove: (id: string) => void;
 			};
 
 			skin: {
