@@ -1,16 +1,13 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-import { join } from 'path';
-import { addAccount, ensureReady } from './papyrus/src/auth/auth';
+import { BrowserWindow, ipcMain } from 'electron';
+import { addAccount } from './papyrus/src/auth/auth';
 import { loadProfiles } from './papyrus/src/auth/persist';
 import type { Storage } from './storage';
 
 export class Users {
-	storagePath: string;
 	active: string | undefined;
 	storage: Storage;
 
-	constructor(path: string, storage: Storage) {
-		this.storagePath = path;
+	constructor(storage: Storage) {
 		this.storage = storage;
 		this.active = storage.getItem('user:active') as string;
 	}
@@ -21,13 +18,19 @@ export class Users {
 		BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('user:onActive', id));
 	}
 
+	remove(id: string) {
+		this.active = id;
+		this.storage.setItem('user:active', id);
+		BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('user:onActive', id));
+	}
+
 	addListeners() {
 		ipcMain.handle('user:get', () => {
-			return loadProfiles(this.storagePath);
+			return loadProfiles();
 		});
 
 		ipcMain.handle('user:add', async () => {
-			return await addAccount(this.storagePath);
+			return await addAccount();
 		});
 
 		ipcMain.handle('user:getActive', () => {

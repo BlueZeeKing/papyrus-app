@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { ContextMenu } from './contextmenu';
+import { setPath } from './papyrus/src/main';
 import { SkinSetter } from './setskin';
 import { Storage } from './storage';
 import { Users } from './users';
@@ -35,13 +36,15 @@ async function main() {
 		mkdirSync(dataPath, { recursive: true });
 	}
 
+	setPath(dataPath);
+
 	const storage = new Storage(dataPath);
 
 	await storage.loadStorage();
 
-	const users = new Users(dataPath, storage);
-	const skin = new SkinSetter(dataPath);
-	const contextmenu = new ContextMenu(dataPath, skin, users);
+	const users = new Users(storage);
+	const skin = new SkinSetter();
+	const contextmenu = new ContextMenu(skin, users);
 
 	await app.whenReady();
 

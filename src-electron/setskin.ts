@@ -1,23 +1,15 @@
 import axios from 'axios';
-import { app, BrowserWindow, dialog, ipcMain, type IpcMainEvent } from 'electron';
-import { readFile } from 'fs/promises';
+import { BrowserWindow, dialog, ipcMain } from 'electron';
 import { basename, join } from 'path';
-import { addAccount, ensureReady } from './papyrus/src/auth/auth';
-import { loadProfiles, loadSingleProfile } from './papyrus/src/auth/persist';
-import type { Storage } from './storage';
+import { ensureReady } from './papyrus/src/auth/auth';
+import { loadSingleProfile } from './papyrus/src/auth/persist';
 import FormData from 'form-data';
-import { Blob } from 'buffer';
 import { createReadStream } from 'fs';
 
 export class SkinSetter {
-	storagePath: string;
 	window: BrowserWindow | undefined;
 	uuid: string | undefined;
 	filePath: string | undefined;
-
-	constructor(path: string) {
-		this.storagePath = path;
-	}
 
 	async setSkin(window: BrowserWindow, id: string) {
 		this.uuid = id;
@@ -60,7 +52,7 @@ export class SkinSetter {
 				return;
 			}
 
-			await ensureReady(this.storagePath, this.uuid);
+			await ensureReady(this.uuid);
 			const data = new FormData();
 
 			data.append('variant', slim ? 'slim' : 'classic');
@@ -71,11 +63,7 @@ export class SkinSetter {
 				data,
 				{
 					headers: {
-						Authorization: `Bearer ${
-							(
-								await loadSingleProfile(this.storagePath, this.uuid as string)
-							)?.token
-						}`,
+						Authorization: `Bearer ${(await loadSingleProfile(this.uuid as string))?.token}`,
 						...data.getHeaders()
 					}
 				}

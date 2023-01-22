@@ -3,12 +3,10 @@ import type { SkinSetter } from './setskin';
 import type { Users } from './users';
 
 export class ContextMenu {
-	path: string;
 	skin: SkinSetter;
 	user: Users;
 
-	constructor(path: string, skin: SkinSetter, user: Users) {
-		this.path = path;
+	constructor(skin: SkinSetter, user: Users) {
 		this.skin = skin;
 		this.user = user;
 	}
