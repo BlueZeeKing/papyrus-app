@@ -1,4 +1,5 @@
-import { dialog, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import { join } from 'path';
 import { addAccount, ensureReady } from './papyrus/src/auth/auth';
 import { loadProfiles } from './papyrus/src/auth/persist';
 import type { Storage } from './storage';
@@ -12,7 +13,12 @@ export class Users {
 		this.storagePath = path;
 		this.storage = storage;
 		this.active = storage.getItem('user:active') as string;
-		console.log(this.active);
+	}
+
+	setActive(id: string) {
+		this.active = id;
+		this.storage.setItem('user:active', id);
+		BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('user:onActive', id));
 	}
 
 	addListeners() {
@@ -28,19 +34,6 @@ export class Users {
 			return this.active;
 		});
 
-		ipcMain.on('user:setActive', (e, id: string) => {
-			this.active = id;
-			this.storage.setItem('user:active', id);
-		});
-
-		ipcMain.on('user:setSkin', async (e, id: string) => {
-			const data = await Promise.all([
-				dialog.showOpenDialog({}),
-				ensureReady(this.storagePath, id)
-			]);
-
-			if (!data[0].canceled) {
-			}
-		});
+		ipcMain.on('user:setActive', (e, id) => this.setActive(id));
 	}
 }

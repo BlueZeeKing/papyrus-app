@@ -15,7 +15,11 @@
 	});
 </script>
 
-<div class="flex p-4 !bg-opacity-50 even:bg-zinc-800" role="listitem">
+<div
+	class="flex p-4 !bg-opacity-50 even:bg-zinc-800"
+	role="listitem"
+	on:contextmenu|preventDefault={() => window.electron.contextmenu.user(uuid)}
+>
 	<img
 		src={`https://mc-heads.net/avatar/${uuid}`}
 		alt="Minecraft Avatar"
@@ -23,7 +27,7 @@
 	/>
 	<h2 class="text my-auto mx-3 text-md text-zinc-100">{username}</h2>
 	<div class="flex-grow" />
-	<Button>Change Skin</Button>
+	<Button on:click={() => window.electron.skin.start(uuid)}>Change Skin</Button>
 	<IconButton state="error">
 		<Trash slot="icon" class="h-6" />
 		<span slot="text">Remove</span>

@@ -2,10 +2,10 @@
 	import Button from './Button.svelte';
 	import type { State } from '../libs/types';
 
-	export let state: State;
+	export let state: State = 'outline';
 </script>
 
-<Button {state}>
+<Button {state} on:click>
 	<div class="flex">
 		<div class="h-6 -ml-2 pr-2">
 			<slot name="icon" />

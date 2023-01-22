@@ -16,6 +16,8 @@ specifiers:
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
+  form-data: ^4.0.0
+  nanoid: ^4.0.0
   open: ^8.4.0
   postcss: ^8.4.21
   prettier: ^2.8.0
@@ -33,6 +35,8 @@ specifiers:
 dependencies:
   axios: 1.2.3
   dayjs: 1.11.7
+  form-data: 4.0.0
+  nanoid: 4.0.0
   open: 8.4.0
   ws: 8.12.0
 
@@ -2479,6 +2483,12 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
     dev: true
+
+  /nanoid/4.0.0:
+    resolution: {integrity: sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
 
   /natural-compare-lite/1.4.0:
     resolution: {integrity: sha512-Tj+HTDSJJKaZnfiuw+iaF9skdPpTo2GtEly5JHnWV/hfv2Qj/9RKsGISQtLh2ox3l5EAGw487hnBee0sIJ6v2g==}

@@ -15,6 +15,7 @@ declare global {
 	interface Window {
 		electron: {
 			onFocusChange: (callback: (focused: boolean) => void) => void;
+			toBase64: (a: ArrayBuffer) => Promise<string>;
 
 			storage: {
 				get: (key: string) => unknown;
@@ -22,8 +23,6 @@ declare global {
 			};
 
 			route: {
-				change: (route: string) => void;
-				onChange: (callback: (route: string) => void) => void;
 				openContextMenu: (route: string) => void;
 			};
 
@@ -32,6 +31,20 @@ declare global {
 				add: () => Promise<LoginInfo[]>;
 				getActive: () => Promise<string>;
 				setActive: (id: string) => void;
+				onActive: (callback: (e: unknown, id: string) => void) => void;
+			};
+
+			skin: {
+				start: (id: string) => void;
+				cancel: () => void;
+				upload: () => void;
+				file: (callback: (e: unknown, name: string) => void) => void;
+				confirm: (slim: boolean) => void;
+				refetch: (callback: (e: unknown, id: string) => void) => void;
+			};
+
+			contextmenu: {
+				user: (id: string) => void;
 			};
 		};
 	}
