@@ -5,11 +5,11 @@
 	export let target: Route;
 
 	const handleContext = (e: MouseEvent) => {
-		window.electron.route.openContextMenu(target);
+		window.electron.contextmenu.route(target);
 	};
 
 	const redirect = () => {
-		window.electron.route.change(target);
+		route.set(target);
 	};
 </script>
 

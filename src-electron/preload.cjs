@@ -7,17 +7,13 @@ contextBridge.exposeInMainWorld('electron', {
 		});
 	},
 
+	getRoute: () => ipcRenderer.invoke('getRoute'),
+
 	toBase64: (value) => ipcRenderer.invoke('tobase64', value),
 
 	storage: {
 		get: (key) => ipcRenderer.invoke('storage:get', key),
 		set: (key, value) => ipcRenderer.invoke('storage:set', key, value)
-	},
-
-	route: {
-		change: (route) => ipcRenderer.send('changeRoute', route),
-		onChange: (callback) => ipcRenderer.on('changeRoute', (e, data) => callback(data)),
-		openContextMenu: (route) => ipcRenderer.send('openRouteContext', route)
 	},
 
 	users: {
@@ -40,6 +36,7 @@ contextBridge.exposeInMainWorld('electron', {
 	},
 
 	contextmenu: {
-		user: (id) => ipcRenderer.send('contextmenu:user', id)
+		user: (id) => ipcRenderer.send('contextmenu:user', id),
+		route: (route) => ipcRenderer.send('contextmenu:route', route)
 	}
 });

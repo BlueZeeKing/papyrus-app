@@ -1,7 +1,7 @@
-import { readable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 export type Route = 'user' | 'overview';
 
-export const route = readable<Route>('overview', (set) => {
-	window.electron.route.onChange((newRoute) => set(newRoute as Route));
-});
+export const route = writable<Route>('overview');
+
+window.electron.getRoute().then((string) => route.set(string as Route));

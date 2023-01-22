@@ -16,16 +16,11 @@ declare global {
 		electron: {
 			onFocusChange: (callback: (focused: boolean) => void) => void;
 			toBase64: (a: ArrayBuffer) => Promise<string>;
+			getRoute: () => Promise<string>;
 
 			storage: {
 				get: (key: string) => unknown;
 				set: (key: string, value: unknown) => void;
-			};
-
-			route: {
-				openContextMenu: (route: string) => void;
-				change: (route: string) => void;
-				onChange: (callback: (e: unknown, route: string) => void) => void;
 			};
 
 			users: {
@@ -49,6 +44,7 @@ declare global {
 
 			contextmenu: {
 				user: (id: string) => void;
+				route: (target: string) => void;
 			};
 		};
 	}

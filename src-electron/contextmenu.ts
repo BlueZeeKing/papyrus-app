@@ -1,38 +1,47 @@
 import { BrowserWindow, ipcMain, Menu, MenuItem, type MenuItemConstructorOptions } from 'electron';
-import type { SkinSetter } from './setskin';
-import type { Users } from './users';
+import { createWindow, skin, users } from './index';
+import type { Route } from '../src/libs/route';
+import { setRoute } from './route';
 
 export class ContextMenu {
-	skin: SkinSetter;
-	user: Users;
-
-	constructor(skin: SkinSetter, user: Users) {
-		this.skin = skin;
-		this.user = user;
-	}
-
 	addListeners() {
 		ipcMain.on('contextmenu:user', (e, id: string) => {
 			const template: (MenuItemConstructorOptions | MenuItem)[] = [
 				{
 					label: 'Change Skin',
-					click: () =>
-						this.skin.setSkin(BrowserWindow.fromWebContents(e.sender) as BrowserWindow, id)
+					click: () => skin.setSkin(BrowserWindow.fromWebContents(e.sender) as BrowserWindow, id)
 				},
 				{
 					label: 'Remove',
-					click: () =>
-						this.user.remove(id, BrowserWindow.fromWebContents(e.sender) as BrowserWindow)
+					click: () => users.remove(id, BrowserWindow.fromWebContents(e.sender) as BrowserWindow)
 				},
 				{
 					label: 'Set Active',
-					click: () => this.user.setActive(id)
+					click: () => users.setActive(id)
 				},
 				{
 					type: 'separator'
 				},
 				{
 					label: 'Force refresh'
+				}
+			];
+
+			Menu.buildFromTemplate(template).popup({
+				window: BrowserWindow.fromWebContents(e.sender) as BrowserWindow
+			});
+		});
+
+		ipcMain.on('contextmenu:route', (e, route: Route) => {
+			const template: (MenuItemConstructorOptions | MenuItem)[] = [
+				{
+					label: 'Open in new window',
+					click: () => {
+						const win = createWindow(true);
+						setRoute(win.id, route);
+
+						win.loadURL('http://localhost:5173/');
+					}
 				}
 			];
 

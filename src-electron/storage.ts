@@ -1,6 +1,5 @@
 import { ipcMain } from 'electron';
-import { writeFileSync } from 'fs';
-import { readFile } from 'fs/promises';
+import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 export class Storage {
@@ -10,13 +9,14 @@ export class Storage {
 
 	constructor(path: string) {
 		this.storagePath = resolve(path, 'storage.json');
+		this.loadStorage();
 	}
 
 	async loadStorage() {
 		let fileData: string;
 
 		try {
-			fileData = await readFile(this.storagePath, { encoding: 'utf-8' });
+			fileData = readFileSync(this.storagePath, { encoding: 'utf-8' });
 		} catch {
 			fileData = '{}';
 		}
@@ -35,8 +35,8 @@ export class Storage {
 		}, 1000);
 	}
 
-	getItem(key: string): unknown {
-		return this.storage[key];
+	getItem<T>(key: string): T {
+		return this.storage[key] as T;
 	}
 
 	setItem(key: string, value: unknown) {
@@ -45,10 +45,7 @@ export class Storage {
 	}
 
 	addListeners() {
-		ipcMain.handle('storage:get', (e, key: string) => this.storage[key]);
-		ipcMain.handle('storage:set', (e, key: string, value: unknown) => {
-			this.storage[key] = value;
-			this.updateStorage();
-		});
+		ipcMain.handle('storage:get', (e, key: string) => this.getItem(key));
+		ipcMain.handle('storage:set', (e, key: string, value: unknown) => this.setItem(key, value));
 	}
 }

@@ -1,20 +1,18 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
+import { storage } from './index';
 import { addAccount } from './papyrus/src/auth/auth';
 import { loadProfiles, removeProfile } from './papyrus/src/auth/persist';
-import type { Storage } from './storage';
 
 export class Users {
 	active: string | undefined;
-	storage: Storage;
 
-	constructor(storage: Storage) {
-		this.storage = storage;
-		this.active = storage.getItem('user:active') as string;
+	constructor() {
+		this.active = storage.getItem<string>('user:active');
 	}
 
 	setActive(id: string) {
 		this.active = id;
-		this.storage.setItem('user:active', id);
+		storage.setItem('user:active', id);
 		BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('user:onActive', id));
 	}
 

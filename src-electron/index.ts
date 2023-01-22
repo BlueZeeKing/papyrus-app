@@ -3,14 +3,21 @@ import { existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { ContextMenu } from './contextmenu';
 import { setPath } from './papyrus/src/main';
+import { getRoute } from './route';
 import { SkinSetter } from './setskin';
 import { Storage } from './storage';
 import { Users } from './users';
 
-const createWindow = () => {
+export const createWindow = (wait = false): BrowserWindow => {
+	let size = storage.getItem<[number, number]>('size');
+
+	if (size == undefined) {
+		size = [800, 600];
+	}
+
 	const win = new BrowserWindow({
-		width: 1600,
-		height: 1200,
+		width: size[0],
+		height: size[1],
 		titleBarStyle: 'hiddenInset',
 		backgroundColor: '#27272a',
 		webPreferences: {
@@ -18,7 +25,9 @@ const createWindow = () => {
 		}
 	});
 
-	win.loadURL('http://localhost:5173/');
+	if (!wait) {
+		win.loadURL('http://localhost:5173/');
+	}
 
 	win.on('focus', () => {
 		win.webContents.send('focus', true);
@@ -27,9 +36,20 @@ const createWindow = () => {
 	win.on('blur', () => {
 		win.webContents.send('focus', false);
 	});
+
+	win.on('resize', () => {
+		storage.setItem('size', win.getSize());
+	});
+
+	return win;
 };
 
 export const dataPath = resolve(app.getPath('appData'), 'papyrus');
+
+export const storage = new Storage(dataPath);
+export const users = new Users();
+export const skin = new SkinSetter();
+export const contextmenu = new ContextMenu();
 
 async function main() {
 	if (!existsSync(dataPath)) {
@@ -37,14 +57,6 @@ async function main() {
 	}
 
 	setPath(dataPath);
-
-	const storage = new Storage(dataPath);
-
-	await storage.loadStorage();
-
-	const users = new Users(storage);
-	const skin = new SkinSetter();
-	const contextmenu = new ContextMenu(skin, users);
 
 	await app.whenReady();
 
@@ -57,9 +69,9 @@ async function main() {
 		return Buffer.from(buffer).toString('base64');
 	});
 
-	ipcMain.on('changeRoute', (e, route: string) => {
-		e.sender.send('changeRoute', route);
-	});
+	ipcMain.handle('getRoute', (e) =>
+		getRoute((BrowserWindow.fromWebContents(e.sender) as BrowserWindow).id)
+	);
 
 	createWindow();
 
