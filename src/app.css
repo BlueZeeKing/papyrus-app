@@ -7,17 +7,9 @@
 }
 
 .primary {
-	@apply fill-zinc-300 transition duration-100;
+	@apply fill-current;
 }
 
 .secondary {
-	@apply fill-zinc-300 transition duration-100;
-}
-
-svg:active > .primary {
-	@apply fill-zinc-50;
-}
-
-svg:active > .secondary {
-	@apply fill-zinc-50;
+	@apply fill-current;
 }

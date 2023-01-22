@@ -2,8 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { Storage } from './storage';
-import { loadLoginInfo } from './papyrus/src/auth/persist';
-import { getProfile } from './papyrus/src/auth/auth';
+import { Users } from './users';
 
 const createWindow = () => {
 	const win = new BrowserWindow({
@@ -36,11 +35,14 @@ async function main() {
 
 	const storage = new Storage(dataPath);
 
+	await storage.loadStorage();
+
+	const users = new Users(dataPath, storage);
+
 	await app.whenReady();
 
-	console.log(await getProfile((await loadLoginInfo(dataPath)).token));
-
 	storage.addListeners();
+	users.addListeners();
 
 	ipcMain.on('changeRoute', (e, route: string) => {
 		e.sender.send('changeRoute', route);

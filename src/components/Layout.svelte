@@ -45,7 +45,7 @@
 		class:hidden={$focus}
 		style:left={`${width}px`}
 	/>
-	<div class="p-2 main overflow-y-auto">
+	<div class="main overflow-y-auto">
 		<slot />
 	</div>
 </div>
@@ -59,10 +59,6 @@
 
 	.top {
 		grid-area: top;
-	}
-
-	.side {
-		grid-area: side;
 	}
 
 	.main {

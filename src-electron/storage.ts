@@ -35,6 +35,15 @@ export class Storage {
 		}, 1000);
 	}
 
+	getItem(key: string): unknown {
+		return this.storage[key];
+	}
+
+	setItem(key: string, value: unknown) {
+		this.storage[key] = value;
+		this.updateStorage();
+	}
+
 	addListeners() {
 		ipcMain.handle('storage:get', (e, key: string) => this.storage[key]);
 		ipcMain.handle('storage:set', (e, key: string, value: unknown) => {

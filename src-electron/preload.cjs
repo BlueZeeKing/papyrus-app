@@ -14,5 +14,11 @@ contextBridge.exposeInMainWorld('electron', {
 		change: (route) => ipcRenderer.send('changeRoute', route),
 		onChange: (callback) => ipcRenderer.on('changeRoute', (e, data) => callback(data)),
 		openContextMenu: (route) => ipcRenderer.send('openRouteContext', route)
+	},
+	users: {
+		get: () => ipcRenderer.invoke('user:get'),
+		add: () => ipcRenderer.invoke('user:add'),
+		getActive: (id) => ipcRenderer.invoke('user:getActive'),
+		setActive: (id) => ipcRenderer.send('user:setActive', id)
 	}
 });

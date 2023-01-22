@@ -5,8 +5,6 @@
 	export let target: Route;
 
 	const handleContext = (e: MouseEvent) => {
-		e.preventDefault();
-
 		window.electron.route.openContextMenu(target);
 	};
 
@@ -16,7 +14,7 @@
 </script>
 
 <button
-	on:contextmenu={handleContext}
+	on:contextmenu|preventDefault={handleContext}
 	on:click={redirect}
 	role="link"
 	class="text-zinc-200 active:text-zinc-100 text-left rounded p-2 py-1 transition duration-200 bg-opacity-75"
